@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>rATE</title>
+  <style>
+    :root { color-scheme: light; }
+    body { margin: 0; background: #2a1f14; color: #f6efe4; font: 17px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    main { max-width: 420px; margin: 0 auto; padding: 72px 24px; text-align: center; }
+    .brand { font-weight: 800; font-size: 40px; letter-spacing: -0.5px; }
+    .brand span { color: #d9a45b; }
+    h1 { font-size: 22px; line-height: 1.3; margin: 28px 0 0; }
+    p { color: rgba(246,239,228,0.75); margin: 10px 0 30px; }
+    a.button { display: block; background: #d9a45b; color: #2a1f14; font-weight: 700; text-decoration: none; padding: 16px; border-radius: 16px; margin-top: 12px; }
+    a.secondary { background: transparent; color: #f6efe4; border: 1px solid rgba(246,239,228,0.3); }
+    .hint { font-size: 14px; margin-top: 28px; }
+  </style>
+</head>
+<body>
+<main>
+  <div class="brand">r<span>ATE</span></div>
+  <h1 id="title">Bewerte Orte mit deinen Freunden</h1>
+  <p id="body">Ehrlich, im Vergleich statt mit Sternen.</p>
+  <a class="button" id="open" href="ratefood://">In rATE öffnen</a>
+  <a class="button secondary" href="https://testflight.apple.com/join/cFARcsKQ">rATE holen</a>
+</main>
+<script>
+  var params = new URLSearchParams(location.search);
+  var to = params.get('to') || (params.get('id') ? 'restaurant/' + params.get('id') : '');
+  var uuid = '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
+  var texts = {
+    restaurant: ['Wie war’s?', 'Bewerte diesen Ort mit deinen Freunden auf rATE – im Vergleich statt mit Sternen.'],
+    freund: ['Du wurdest zu rATE eingeladen', 'Sieh dir an, welche Orte deine Freunde lieben – und vergleiche deine eigenen.'],
+    creator: ['Deine Einladung als Creator', 'Öffne rATE, der Code ist schon eingetragen.']
+  };
+  var link = 'ratefood://';
+  if (new RegExp('^restaurant/' + uuid + '$', 'i').test(to)) {
+    var id = to.split('/')[1];
+    link = 'ratefood://restaurant/' + id + '?placeId=' + id;
+  } else if (new RegExp('^freund/' + uuid + '$', 'i').test(to)) {
+    link = 'ratefood://' + to;
+  } else if (new RegExp('^creator/[A-Z0-9]{4,16}$', 'i').test(to)) {
+    link = 'ratefood://creator/' + to.split('/')[1].toUpperCase();
+  } else {
+    to = '';
+  }
+  var kind = to.split('/')[0];
+  if (texts[kind]) {
+    document.getElementById('title').textContent = texts[kind][0];
+    document.getElementById('body').textContent = texts[kind][1];
+  }
+  document.getElementById('open').href = link;
+</script>
+</body>
+</html>
