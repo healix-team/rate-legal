@@ -32,7 +32,8 @@
   var texts = {
     restaurant: ['Wie war’s?', 'Bewerte diesen Ort mit deinen Freunden auf rATE – im Vergleich statt mit Sternen.'],
     freund: ['Du wurdest zu rATE eingeladen', 'Sieh dir an, welche Orte deine Freunde lieben – und vergleiche deine eigenen.'],
-    creator: ['Deine Einladung als Creator', 'Öffne rATE, der Code ist schon eingetragen.']
+    creator: ['Deine Einladung als Creator', 'Öffne rATE, der Code ist schon eingetragen.'],
+    'team-einladung': ['Deine Einladung ins Team', 'Öffne rATE und bestätige dort. Neu bei rATE? Melde dich zuerst an und öffne diesen Link dann noch einmal.']
   };
   var link = 'ratefood://';
   if (new RegExp('^restaurant/' + uuid + '$', 'i').test(to)) {
@@ -42,6 +43,8 @@
     link = 'ratefood://' + to;
   } else if (new RegExp('^creator/[A-Z0-9]{4,16}$', 'i').test(to)) {
     link = 'ratefood://creator/' + to.split('/')[1].toUpperCase();
+  } else if (new RegExp('^team-einladung/[0-9a-f]{32}$').test(to)) {
+    link = 'ratefood://' + to;
   } else {
     to = '';
   }
